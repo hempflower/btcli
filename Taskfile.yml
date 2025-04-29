@@ -1,0 +1,14 @@
+version: "3"
+tasks:
+  build:
+    dir: cmd/btcli
+    cmds:
+      - go build -o build/btcli{{.exeExt}} .
+    env:
+      CGO_ENABLED: "0"
+  dev:
+    deps:
+      - build
+    dir: cmd/btcli/build
+    cmds:
+      - ./btcli{{.exeExt}}
