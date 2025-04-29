@@ -137,7 +137,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
-							response, err := bt.StartNodeProject(cmd.String("name"))
+							response, err := bt.StopNodeProject(cmd.String("name"))
 							if err != nil {
 								return err
 							}
