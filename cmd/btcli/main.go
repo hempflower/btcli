@@ -100,6 +100,80 @@ func main() {
 					},
 				},
 			},
+			{
+				Name: "node",
+				Commands: []*cli.Command{
+					{
+						Name: "start",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:     "name",
+								Usage:    "The name of the go project",
+								Required: true,
+							},
+						},
+						Action: func(ctx context.Context, cmd *cli.Command) error {
+							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							response, err := bt.StartNodeProject(cmd.String("name"))
+							if err != nil {
+								return err
+							}
+							if !response.Status {
+								log.Fatal(response.Msg)
+							} else {
+								log.Println(response.Msg)
+							}
+							return nil
+						},
+					},
+					{
+						Name: "stop",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:     "name",
+								Usage:    "The name of the go project",
+								Required: true,
+							},
+						},
+						Action: func(ctx context.Context, cmd *cli.Command) error {
+							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							response, err := bt.StartNodeProject(cmd.String("name"))
+							if err != nil {
+								return err
+							}
+							if !response.Status {
+								log.Fatal(response.Msg)
+							} else {
+								log.Println(response.Msg)
+							}
+							return nil
+						},
+					},
+					{
+						Name: "restart",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:     "name",
+								Usage:    "The name of the go project",
+								Required: true,
+							},
+						},
+						Action: func(ctx context.Context, cmd *cli.Command) error {
+							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							response, err := bt.RestartNodeProject(cmd.String("name"))
+							if err != nil {
+								return err
+							}
+							if !response.Status {
+								log.Fatal(response.Msg)
+							} else {
+								log.Println(response.Msg)
+							}
+							return nil
+						},
+					},
+				},
+			},
 		},
 	}
 

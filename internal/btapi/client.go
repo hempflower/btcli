@@ -111,6 +111,72 @@ func (bt *BtApiClient) StopGoProject(name string) (*StopGoProjectResponse, error
 	return &response, nil
 }
 
+type StartNodeProjectResponse struct {
+	Code      int    `json:"code"`
+	Msg       string `json:"msg"`
+	Status    bool   `json:"status"`
+	Timestamp int64  `json:"timestamp"`
+}
+
+func (bt *BtApiClient) StartNodeProject(name string) (*StartNodeProjectResponse, error) {
+	var err error
+	postForm := url.Values{}
+	postForm.Set("project_name", name)
+	postForm.Set("project_type", "general")
+	postForm.Set("status", "start")
+	var response StartNodeProjectResponse
+	err = bt.InvokeBtApi("/mod/nodejs/com/set_project_status", postForm, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+type StopNodeProjectResponse struct {
+	Code      int    `json:"code"`
+	Msg       string `json:"msg"`
+	Status    bool   `json:"status"`
+	Timestamp int64  `json:"timestamp"`
+}
+
+func (bt *BtApiClient) StopNodeProject(name string) (*StopNodeProjectResponse, error) {
+	var err error
+	postForm := url.Values{}
+	postForm.Set("project_name", name)
+	postForm.Set("project_type", "general")
+	postForm.Set("status", "stop")
+	var response StopNodeProjectResponse
+	err = bt.InvokeBtApi("/mod/nodejs/com/set_project_status", postForm, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+type RestartNodeProjectResponse struct {
+	Code      int    `json:"code"`
+	Msg       string `json:"msg"`
+	Status    bool   `json:"status"`
+	Timestamp int64  `json:"timestamp"`
+}
+
+func (bt *BtApiClient) RestartNodeProject(name string) (*RestartNodeProjectResponse, error) {
+	var err error
+	postForm := url.Values{}
+	postForm.Set("project_name", name)
+	postForm.Set("project_type", "general")
+	postForm.Set("status", "restart")
+	var response RestartNodeProjectResponse
+	err = bt.InvokeBtApi("/mod/nodejs/com/set_project_status", postForm, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
 func NewBtApiClient(btUrl string, btKey string) *BtApiClient {
 	return &BtApiClient{
 		btUrl: btUrl,
