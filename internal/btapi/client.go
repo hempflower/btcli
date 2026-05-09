@@ -6,8 +6,10 @@ import (
 	"crypto/tls"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/carlmjohnson/requests"
@@ -17,6 +19,7 @@ type BtApiClient struct {
 	btUrl              string
 	btKey              string
 	ignoreSslTransport *http.Transport
+	curlMode           bool
 }
 
 // 生成 request_token: md5(request_time + md5(api_sk))
@@ -42,9 +45,36 @@ type RestartGoProjectResponse struct {
 	Data       string `json:"data"`
 }
 
+func (bt *BtApiClient) SetCurlMode(enabled bool) {
+	bt.curlMode = enabled
+}
+
+// buildCurlCommand 构造并输出等效的 curl 命令
+func (bt *BtApiClient) buildCurlCommand(path string, body url.Values) {
+	var sb strings.Builder
+	sb.WriteString("curl")
+	if bt.ignoreSslTransport != nil {
+		sb.WriteString(" -k")
+	}
+	sb.WriteString(" -X POST")
+	sb.WriteString(fmt.Sprintf(" '%s%s'", strings.TrimSuffix(bt.btUrl, "/"), path))
+	for k, vs := range body {
+		for _, v := range vs {
+			sb.WriteString(fmt.Sprintf(" -d '%s=%s'", k, v))
+		}
+	}
+	log.Println(sb.String())
+}
+
 func (bt *BtApiClient) InvokeBtApi(path string, body url.Values, resp any) error {
-	var err error
 	bt.AppendSignatureBody(body)
+
+	if bt.curlMode {
+		bt.buildCurlCommand(path, body)
+		return nil
+	}
+
+	var err error
 	err = requests.
 		URL(bt.btUrl).
 		Transport(bt.ignoreSslTransport).
