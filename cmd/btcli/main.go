@@ -24,6 +24,10 @@ func main() {
 				Usage:    "The API key for the BT-Panel API",
 				Required: true,
 			},
+			&cli.BoolFlag{
+				Name:  "curl",
+				Usage: "Output the equivalent curl command instead of making the request",
+			},
 		},
 		Commands: []*cli.Command{
 			{
@@ -40,6 +44,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							bt.SetCurlMode(cmd.Bool("curl"))
 							response, err := bt.StartGoProject(cmd.String("name"))
 							if err != nil {
 								return err
@@ -63,6 +68,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							bt.SetCurlMode(cmd.Bool("curl"))
 							response, err := bt.StopGoProject(cmd.String("name"))
 							if err != nil {
 								return err
@@ -86,6 +92,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							bt.SetCurlMode(cmd.Bool("curl"))
 							response, err := bt.RestartGoProject(cmd.String("name"))
 							if err != nil {
 								return err
@@ -114,6 +121,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							bt.SetCurlMode(cmd.Bool("curl"))
 							response, err := bt.StartNodeProject(cmd.String("name"))
 							if err != nil {
 								return err
@@ -137,6 +145,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							bt.SetCurlMode(cmd.Bool("curl"))
 							response, err := bt.StopNodeProject(cmd.String("name"))
 							if err != nil {
 								return err
@@ -160,6 +169,7 @@ func main() {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							bt := btapi.NewBtApiClient(cmd.String("bt-url"), cmd.String("bt-key"))
+							bt.SetCurlMode(cmd.Bool("curl"))
 							response, err := bt.RestartNodeProject(cmd.String("name"))
 							if err != nil {
 								return err
